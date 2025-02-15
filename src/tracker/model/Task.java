@@ -1,3 +1,5 @@
+package tracker.model;
+
 public class Task {
 
     protected String name;
@@ -27,11 +29,11 @@ public class Task {
         this.description = description;
     }
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -53,3 +55,4 @@ public class Task {
                 '}';
     }
 }
+
