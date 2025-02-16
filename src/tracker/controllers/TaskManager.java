@@ -77,31 +77,16 @@ public class TaskManager {
         subtasks.clear();
     }
 
-    public ArrayList<Task> getTask(int id) {
-        if (tasks.get(id) != null) {
-            ArrayList<Task> task = new ArrayList<>();
-            task.add(tasks.get(id));
-            return task;
-        }
-        return null;
+    public Task getTask(int id) {
+        return tasks.get(id);
     }
 
-    public ArrayList<Epic> getEpic(int id) {
-        if (epics.get(id) != null) {
-            ArrayList<Epic> epic = new ArrayList<>();
-            epic.add(epics.get(id));
-            return epic;
-        }
-        return null;
+    public Epic getEpic(int id) {
+        return epics.get(id);
     }
 
-    public ArrayList<Subtask> getSubtask(int id) {
-        if (subtasks.get(id) != null) {
-            ArrayList<Subtask> subtask = new ArrayList<>();
-            subtask.add(subtasks.get(id));
-            return subtask;
-        }
-        return null;
+    public Subtask getSubtask(int id) {
+        return subtasks.get(id);
     }
 
     public void updateTask(int id, Task task) {
@@ -171,28 +156,30 @@ public class TaskManager {
             int countNew = 0;
             int countDone = 0;
             Status status = Status.IN_PROGRESS;
-            ArrayList<Integer> subtasksIds = epics.get(id).getSubtasksIds();
-            if (subtasksIds != null) {
-                for (int idSubtask : subtasksIds) {
-                    switch (subtasks.get(idSubtask).getStatus()) {
-                        case DONE -> {
-                            countDone++;
-                            break;
-                        }
-                        case NEW -> {
-                            countNew++;
-                            break;
+            if (epics.containsKey(id)) {
+                ArrayList<Integer> subtasksIds = epics.get(id).getSubtasksIds();
+                if (subtasksIds != null) {
+                    for (int idSubtask : subtasksIds) {
+                        switch (subtasks.get(idSubtask).getStatus()) {
+                            case DONE -> {
+                                countDone++;
+                                break;
+                            }
+                            case NEW -> {
+                                countNew++;
+                                break;
+                            }
                         }
                     }
-                }
-                if (subtasksIds.size() == countDone) {
-                    status = Status.DONE;
-                }
-                if (subtasksIds.size() == countNew) {
+                    if (subtasksIds.size() == countDone) {
+                        status = Status.DONE;
+                    }
+                    if (subtasksIds.size() == countNew) {
+                        status = Status.NEW;
+                    }
+                } else {
                     status = Status.NEW;
                 }
-            } else {
-                status = Status.NEW;
             }
             epics.get(id).setStatus(status);
     }
