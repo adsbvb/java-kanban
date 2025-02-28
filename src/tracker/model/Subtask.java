@@ -1,8 +1,10 @@
 package tracker.model;
 
+import java.sql.SQLOutput;
+
 public class Subtask extends Task{
 
-    protected int epicId;
+    private int epicId;
 
     public Subtask(String name, String description, Status status, int epicId) {
         super(name, description, status);
@@ -29,7 +31,9 @@ public class Subtask extends Task{
     }
 
     public void setEpicId(int epicId) {
-        this.epicId = epicId;
+        if (this.id != epicId) {
+            this.epicId = epicId;
+        }
     }
 }
 
