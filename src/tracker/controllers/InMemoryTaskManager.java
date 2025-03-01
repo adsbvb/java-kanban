@@ -7,23 +7,24 @@ import tracker.model.Subtask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
 public class InMemoryTaskManager implements TaskManager {
 
-    protected final Map<Integer, Task> tasks;
-    protected final Map<Integer, Epic> epics;
-    protected final Map<Integer, Subtask> subtasks;
-    protected int count;
-    protected final HistoryManagers historyManagers;
+    private final Map<Integer, Task> tasks;
+    private final Map<Integer, Epic> epics;
+    private final Map<Integer, Subtask> subtasks;
+    private int count;
+    private final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.epics = new HashMap<>();
         this.subtasks = new HashMap<>();
         this.count = 0;
-        this.historyManagers = new InMemoryHistoryManager();
+        this.historyManager = Managers.getDefaultHistory();;
     }
 
     public int setNewId() {
@@ -98,19 +99,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {
-        historyManagers.add(tasks.get(id));
+        historyManager.add(tasks.get(id));
         return tasks.get(id);
     }
 
     @Override
     public Epic getEpic(int id) {
-        historyManagers.add(epics.get(id));
+        historyManager.add(epics.get(id));
         return epics.get(id);
     }
 
     @Override
     public Subtask getSubtask(int id) {
-        historyManagers.add(subtasks.get(id));
+        historyManager.add(subtasks.get(id));
         return subtasks.get(id);
     }
 
@@ -212,6 +213,11 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
             epics.get(id).setStatus(status);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 }
 
