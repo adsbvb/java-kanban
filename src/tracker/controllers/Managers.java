@@ -1,7 +1,5 @@
 package tracker.controllers;
 
-import tracker.model.Task;
-
 import java.util.List;
 
 public class Managers {
@@ -10,7 +8,7 @@ public class Managers {
         return new InMemoryTaskManager();
     }
 
-    public static List<Task> getDefaultHistory() {
-        return new InMemoryHistoryManager().getHistory();
+    public static HistoryManager getDefaultHistory() {
+        return new InMemoryHistoryManager();
     }
 }
