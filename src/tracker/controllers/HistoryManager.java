@@ -4,7 +4,7 @@ import tracker.model.Task;
 
 import java.util.List;
 
-public interface HistoryManagers {
+public interface HistoryManager {
 
     void add(Task task);
 

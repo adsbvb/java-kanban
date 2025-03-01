@@ -46,7 +46,7 @@ public class Main {
         taskManager.getEpic(3);
         taskManager.getSubtask(4);
 
-        System.out.println("История просмотров задач: " + Managers.getDefaultHistory());
+        System.out.println("История просмотров задач: " + taskManager.getHistory());
 
     }
 }
