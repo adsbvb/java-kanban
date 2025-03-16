@@ -1,7 +1,5 @@
 package tracker.controllers;
 
-import java.util.List;
-
 public class Managers {
 
     public static TaskManager getDefault() {
