@@ -25,12 +25,15 @@ public class Task {
     public int getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
+
     public String getDescription() {
         return description;
     }
+
     public Status getStatus() {
         return status;
     }
