@@ -1,10 +1,8 @@
 import tracker.controllers.Managers;
 import tracker.controllers.TaskManager;
-import tracker.model.Task;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Status;
-import tracker.controllers.InMemoryTaskManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -32,11 +30,11 @@ public class Main {
         System.out.println(taskManager.getSubtasks());
         System.out.println();*/
 
-        int epic1 = taskManager.createEpic(new Epic(1, "Путевка.", "Выбрать маршрут.", Status.NEW));
-        int subtask1_1 = taskManager.addSubtask(new Subtask(2,"Билеты.", "Купить.", Status.NEW, 1));
-        int subtask1_2 = taskManager.addSubtask(new Subtask(3,"Личные вещи.", "Собрать чемодан.", Status.NEW, 1));
-        int subtask1_3 = taskManager.addSubtask(new Subtask(4,"Такси.", "вызвать до аэропорта.", Status.NEW, 1));
-        int epic2 = taskManager.createEpic(new Epic(5,"Изучить новую специальность.", "Освоить язык программирования Java.", Status.NEW));
+        taskManager.createEpic(new Epic(1, "Путевка.", "Выбрать маршрут.", Status.NEW));
+        taskManager.addSubtask(new Subtask(2,"Билеты.", "Купить.", Status.NEW, 1));
+        taskManager.addSubtask(new Subtask(3,"Личные вещи.", "Собрать чемодан.", Status.NEW, 1));
+        taskManager.addSubtask(new Subtask(4,"Такси.", "вызвать до аэропорта.", Status.NEW, 1));
+        taskManager.createEpic(new Epic(5,"Изучить новую специальность.", "Освоить язык программирования Java.", Status.NEW));
 
         taskManager.getEpic(1);
         System.out.println("История просмотров задач: " + taskManager.getHistory());
