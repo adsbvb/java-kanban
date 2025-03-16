@@ -1,9 +1,8 @@
 package tracker.model;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
-public class Epic extends Task{
+public class Epic extends Task {
 
     private ArrayList<Subtask> subtasks = new ArrayList<>();;
 

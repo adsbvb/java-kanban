@@ -2,7 +2,7 @@ package tracker.model;
 
 import java.util.Objects;
 
-public class Subtask extends Task{
+public class Subtask extends Task {
 
     private int epicId;
 
@@ -42,7 +42,7 @@ public class Subtask extends Task{
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, status, epicId);
+        return Objects.hash(super.hashCode(), epicId);
     }
 }
 
