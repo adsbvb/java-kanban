@@ -8,22 +8,22 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private static class Node<T> {
+    private static class Node {
         Task task;
-        Node<T> prev;
-        Node<T> next;
+        Node prev;
+        Node next;
 
         public Node(Task task) {
             this.task = task;
         }
     }
 
-    private Node<Task> head;
-    private Node<Task> tail;
-    private HashMap<Integer, Node<Task>> taskMap = new HashMap<>();
+    private Node head;
+    private Node tail;
+    private HashMap<Integer, Node> taskMap = new HashMap<>();
 
-    public void linkLast(Task task) {
-        Node<Task> newNode = new Node<>(task);
+    private void linkLast(Task task) {
+        Node newNode = new Node(task);
         if (tail == null) {
             head = tail = newNode;
         } else {
@@ -34,7 +34,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         taskMap.put(task.getId(), newNode);
     }
 
-    public void removeNode(Node<Task> node) {
+    private void removeNode(Node node) {
         if (node.prev != null) {
             node.prev.next = node.next;
         } else {
@@ -48,9 +48,9 @@ public class InMemoryHistoryManager implements HistoryManager {
         taskMap.remove(node.task.getId());
     }
 
-    public ArrayList<Task> getTasks() {
+    private ArrayList<Task> getTasks() {
         ArrayList<Task> listTasks = new ArrayList<>();
-        Node<Task> node = head;
+        Node node = head;
         while (node != null) {
             listTasks.add(node.task);
             node = node.next;
@@ -60,7 +60,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        Node<Task> node = taskMap.get(task.getId());
+        Node node = taskMap.get(task.getId());
         if (node != null) {
             remove(task.getId());
         }
@@ -69,7 +69,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void remove(int id) {
-        Node<Task> node = taskMap.get(id);
+        Node node = taskMap.get(id);
         if (node != null) {
             removeNode(node);
         }
