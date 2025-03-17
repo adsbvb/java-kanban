@@ -3,6 +3,7 @@ import tracker.controllers.TaskManager;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Status;
+import tracker.model.Task;
 
 public class Main {
     public static void main(String[] args) {
@@ -35,6 +36,7 @@ public class Main {
         taskManager.addSubtask(new Subtask(3,"Личные вещи.", "Собрать чемодан.", Status.NEW, 1));
         taskManager.addSubtask(new Subtask(4,"Такси.", "вызвать до аэропорта.", Status.NEW, 1));
         taskManager.createEpic(new Epic(5,"Изучить новую специальность.", "Освоить язык программирования Java.", Status.NEW));
+        taskManager.createTask(new Task(6, "Покупка.", "Купить продукты.", Status.NEW));
 
         taskManager.getEpic(1);
         System.out.println("История просмотров задач: " + taskManager.getHistory());
@@ -53,10 +55,14 @@ public class Main {
         System.out.println();
 
         taskManager.remove(2);
+
+        taskManager.getTask(6);
         System.out.println("История просмотров задач: " + taskManager.getHistory());
         System.out.println();
 
-        taskManager.deleteEpicById(1);
+        taskManager.deleteEpic();
+
+       // taskManager.deleteEpicById(1);
         System.out.println("История просмотров задач: " + taskManager.getHistory());
 
     }
