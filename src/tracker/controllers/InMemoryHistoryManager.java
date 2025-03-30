@@ -3,26 +3,80 @@ package tracker.controllers;
 import tracker.model.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final List<Task> history = new ArrayList<>();
+    private static class Node {
+        Task task;
+        Node prev;
+        Node next;
+
+        public Node(Task task) {
+            this.task = task;
+        }
+    }
+
+    private Node head;
+    private Node tail;
+    private HashMap<Integer, Node> taskMap = new HashMap<>();
+
+    private void linkLast(Task task) {
+        Node newNode = new Node(task);
+        if (tail == null) {
+            head = tail = newNode;
+        } else {
+            newNode.prev = tail;
+            tail.next = newNode;
+            tail = newNode;
+        }
+        taskMap.put(task.getId(), newNode);
+    }
+
+    private void removeNode(Node node) {
+        if (node.prev != null) {
+            node.prev.next = node.next;
+        } else {
+            head = node.next;
+        }
+        if (node.next != null) {
+            node.next.prev = node.prev;
+        } else {
+            tail = node.prev;
+        }
+        taskMap.remove(node.task.getId());
+    }
+
+    private ArrayList<Task> getTasks() {
+        ArrayList<Task> listTasks = new ArrayList<>();
+        Node node = head;
+        while (node != null) {
+            listTasks.add(node.task);
+            node = node.next;
+        }
+        return listTasks;
+    }
 
     @Override
     public void add(Task task) {
-        if (task == null) {
-            return;
+        Node node = taskMap.get(task.getId());
+        if (node != null) {
+            remove(task.getId());
         }
-        history.add(task);
-        if (history.size() > 10) {
-            history.removeFirst();
+        linkLast(task);
+    }
+
+    @Override
+    public void remove(int id) {
+        Node node = taskMap.get(id);
+        if (node != null) {
+            removeNode(node);
         }
     }
 
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<>(history);
+        return getTasks();
     }
-
 }

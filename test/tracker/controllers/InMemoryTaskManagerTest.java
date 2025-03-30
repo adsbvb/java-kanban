@@ -10,11 +10,11 @@ import tracker.model.Task;
 class InMemoryTaskManagerTest {
 
     TaskManager taskManager = Managers.getDefault();
-    Task testTask = new Task("TaskName", "TaskDescription", Status.NEW);
+    Task testTask = new Task(1, "TaskName", "TaskDescription", Status.NEW);
     final int idTask = taskManager.createTask(testTask);
-    Epic testEpic = new Epic("EpicName", "EpicDescription", Status.NEW);
+    Epic testEpic = new Epic(2, "EpicName", "EpicDescription", Status.NEW);
     final int idEpic = taskManager.createEpic(testEpic);
-    Subtask testSubtask = new Subtask("SubtaskName", "SubtaskDescription", Status.NEW, idEpic);
+    Subtask testSubtask = new Subtask(3, "SubtaskName", "SubtaskDescription", Status.NEW, 2);
     final int idSubtask = taskManager.addSubtask(testSubtask);
 
     @Test
@@ -27,7 +27,6 @@ class InMemoryTaskManagerTest {
     @Test
     void subtaskObjectCannotBeMadeItsOwnEpic() {
         Subtask subtask = taskManager.getSubtask(3);
-        subtask.setEpicId(3);
         Assertions.assertNotEquals(3, subtask.getEpicId(), "Подзадача приняла id эпика!");
     }
 
@@ -67,8 +66,13 @@ class InMemoryTaskManagerTest {
         Task testTask1 = new Task("Task1", "Task1", Status.NEW);
         int id1 = taskManager.createTask(testTask1);
         Task testTask2 = new Task("Task2", "Task2", Status.NEW);
-        testTask2.setId(id1);
         int id2 = taskManager.createTask(testTask2);
         Assertions.assertNotEquals(id1, id2, "Конфликт id номеров в менеджере!");
+    }
+
+    @Test
+    void checkIrrelevantSubtaskInEpicList() {
+        taskManager.deleteSubtaskById(idSubtask);
+        Assertions.assertEquals(0, taskManager.getSubtasksListOfEpic(idEpic).size(), "Неактуальная подзадача внутри эпика не удалена!");
     }
 }

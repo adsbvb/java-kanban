@@ -2,9 +2,13 @@ package tracker.model;
 
 import java.util.ArrayList;
 
-public class Epic extends Task{
+public class Epic extends Task {
 
     private ArrayList<Subtask> subtasks = new ArrayList<>();
+
+    public Epic(int id, String name, String description, Status status) {
+        super(id, name, description, status);
+    }
 
     public Epic(String name, String description, Status status) {
         super(name, description, status);
@@ -24,6 +28,10 @@ public class Epic extends Task{
         return subtasks;
     }
 
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public void setSubtasks(ArrayList<Subtask> subtasks) {
         this.subtasks = subtasks;
     }
@@ -31,6 +39,5 @@ public class Epic extends Task{
     public void clearSubtask() {
         subtasks.clear();
     }
-
 }
 

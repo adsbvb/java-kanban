@@ -4,7 +4,6 @@ import tracker.model.Task;
 import tracker.model.Epic;
 import tracker.model.Subtask;
 import tracker.model.Status;
-import tracker.controllers.InMemoryTaskManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,33 +19,6 @@ public class Main {
 
         int epic2 = taskManager.createEpic(new Epic("Изучить новую специальность.", "Освоить язык программирования Java.", Status.NEW));
         int subtask2_1 = taskManager.addSubtask(new Subtask("Учеба.", "Пройти курс на Яндекс-Практикум.", Status.NEW, 6));
-
-        /* System.out.println(taskManager.getTasks());
-        System.out.println(taskManager.getEpics());
-        System.out.println(taskManager.getSubtasks()); */
-
-        taskManager.updateTask(2, new Task("Уборка.", "Пропылесосить ковер", Status.IN_PROGRESS));
-        taskManager.updateEpic(3, new Epic("Путевка", "Спланировать отпуск", Status.DONE));
-        taskManager.updateSubtask(5, new Subtask("Принадлежности для отдыха", "Купить походный инвентарь.", Status.DONE));
-
-        System.out.println(taskManager.getTasks());
-        System.out.println(taskManager.getEpics());
-        System.out.println(taskManager.getSubtasks());
-
-        taskManager.getTask(1);
-        taskManager.getTask(1);
-        taskManager.getEpic(3);
-        taskManager.getSubtask(4);
-        taskManager.getTask(1);
-        taskManager.getTask(1);
-        taskManager.getEpic(3);
-        taskManager.getSubtask(4);
-        taskManager.getTask(1);
-        taskManager.getTask(1);
-        taskManager.getEpic(3);
-        taskManager.getSubtask(4);
-
-        System.out.println("История просмотров задач: " + taskManager.getHistory());
 
     }
 }
