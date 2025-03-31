@@ -4,22 +4,22 @@ import java.util.Objects;
 
 public class Task {
 
+    protected int id;
     protected String name;
     protected String description;
-    protected int id;
     protected Status status;
 
-    public Task(int id, String name, String description, Status status) {
+    public Task(int id, String name, Status status, String description) {
         this.id = id;
         this.name = name;
-        this.description = description;
         this.status = status;
+        this.description = description;
     }
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, Status status, String description) {
         this.name = name;
-        this.description = description;
         this.status = status;
+        this.description = description;
     }
 
     public int getId() {

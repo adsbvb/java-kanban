@@ -20,9 +20,9 @@ public interface TaskManager {
 
     ArrayList<Subtask> getSubtasks();
 
-    void deleteTask();
+    void deleteTasks();
 
-    void deleteEpic();
+    void deleteEpics();
 
     void deleteSubtasks();
 

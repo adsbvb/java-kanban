@@ -1,21 +1,40 @@
 package tracker.controllers;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import tracker.model.Epic;
-import tracker.model.Status;
-import tracker.model.Subtask;
-import tracker.model.Task;
+import tracker.model.*;
+
+import java.io.File;
+import java.io.IOException;
 
 class InMemoryTaskManagerTest {
 
-    TaskManager taskManager = Managers.getDefault();
-    Task testTask = new Task(1, "TaskName", "TaskDescription", Status.NEW);
-    final int idTask = taskManager.createTask(testTask);
-    Epic testEpic = new Epic(2, "EpicName", "EpicDescription", Status.NEW);
-    final int idEpic = taskManager.createEpic(testEpic);
-    Subtask testSubtask = new Subtask(3, "SubtaskName", "SubtaskDescription", Status.NEW, 2);
-    final int idSubtask = taskManager.addSubtask(testSubtask);
+    private File file;
+    private TaskManager taskManager;
+    private Task testTask;
+    private Epic testEpic;
+    private Subtask testSubtask;
+    private int idTask;
+    private int idEpic;
+    private int idSubtask;
+
+    @BeforeEach
+    void setUp() throws IOException {
+        file = File.createTempFile("test_", ".csv");
+        taskManager = Managers.getDefault(file);
+        Assertions.assertNotNull(taskManager, "TaskManager не должен быть null!");
+
+        testTask = new Task(1, "TaskName", Status.NEW, "TaskDescription");
+        idTask = taskManager.createTask(testTask);
+
+        testEpic = new Epic(2, "EpicName", Status.NEW, "EpicDescription");
+        idEpic = taskManager.createEpic(testEpic);
+
+        testSubtask = new Subtask(3, "SubtaskName", Status.NEW, "SubtaskDescription", idEpic);
+        idSubtask = taskManager.addSubtask(testSubtask);
+    }
 
     @Test
     void instancesTaskClassIsEqualIfTheirIdIsEqual() {
@@ -26,36 +45,36 @@ class InMemoryTaskManagerTest {
 
     @Test
     void subtaskObjectCannotBeMadeItsOwnEpic() {
-        Subtask subtask = taskManager.getSubtask(3);
-        Assertions.assertNotEquals(3, subtask.getEpicId(), "Подзадача приняла id эпика!");
+        Subtask subtask = taskManager.getSubtask(idSubtask);
+        Assertions.assertNotEquals(idSubtask, subtask.getEpicId(), "Подзадача приняла id эпика!");
     }
 
     @Test
-    void addNewTask() {
+    void testAddNewTask() {
         Assertions.assertNotNull(taskManager.getTask(idTask), "Задача не проинициализирована!");
         Assertions.assertEquals(testTask, taskManager.getTask(idTask), "Задачи не совпадают");
         Assertions.assertEquals(1, taskManager.getTasks().size(), "Неверное количество задач!");
     }
 
     @Test
-    void addNewEpic() {
+    void testAddNewEpic() {
         Assertions.assertNotNull(taskManager.getEpic(idEpic), "Эпик не проинициализирован!");
         Assertions.assertEquals(testEpic, taskManager.getEpic(idEpic), "Задачи не совпадают");
         Assertions.assertEquals(1, taskManager.getEpics().size(), "Неверное количество задач!");
     }
 
     @Test
-    void addNewSubtask() {
+    void testAddNewSubtask() {
         Assertions.assertEquals(taskManager.getSubtask(3), taskManager.getSubtask(idSubtask), "Экземпляры по номеру id не идентичны!");
         Assertions.assertEquals(testSubtask, taskManager.getSubtask(idSubtask), "Задачи не совпадают");
         Assertions.assertEquals(1, taskManager.getSubtasks().size(), "Неверное количество задач!");
     }
 
     @Test
-    void deleteAllTask() {
-        taskManager.deleteTask();
+    void testDeleteAllTask() {
+        taskManager.deleteTasks();
         Assertions.assertEquals(0, taskManager.getTasks().size());
-        taskManager.deleteEpic();
+        taskManager.deleteEpics();
         Assertions.assertEquals(0, taskManager.getEpics().size());
         taskManager.deleteSubtasks();
         Assertions.assertEquals(0, taskManager.getSubtasks().size());
@@ -63,11 +82,9 @@ class InMemoryTaskManagerTest {
 
     @Test
     void givenIdAndGeneratedIdDoNotConflictInManager() {
-        Task testTask1 = new Task("Task1", "Task1", Status.NEW);
-        int id1 = taskManager.createTask(testTask1);
-        Task testTask2 = new Task("Task2", "Task2", Status.NEW);
-        int id2 = taskManager.createTask(testTask2);
-        Assertions.assertNotEquals(id1, id2, "Конфликт id номеров в менеджере!");
+        Task testTask2 = new Task("Task2", Status.NEW, "Task2");
+        int idTask2 = taskManager.createTask(testTask2);
+        Assertions.assertNotEquals(idTask, idTask2, "Конфликт id номеров в менеджере!");
     }
 
     @Test
