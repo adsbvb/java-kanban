@@ -12,7 +12,7 @@ public interface TaskManager {
 
     int createEpic(Epic epic);
 
-    int addSubtask(Subtask subtask);
+    int createSubtask(Subtask subtask);
 
     ArrayList<Task> getTasks();
 
