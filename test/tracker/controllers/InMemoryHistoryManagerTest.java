@@ -33,7 +33,7 @@ class InMemoryHistoryManagerTest {
         idEpic = taskManager.createEpic(testEpic);
 
         testSubtask = new Subtask(3, "SubtaskName", Status.NEW, "SubtaskDescription", idEpic);
-        idSubtask = taskManager.addSubtask(testSubtask);
+        idSubtask = taskManager.createSubtask(testSubtask);
     }
 
     @Test
