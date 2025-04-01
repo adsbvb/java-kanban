@@ -1,5 +1,6 @@
 package tracker.controllers;
 
+import tracker.exceptions.ManagerSaveException;
 import tracker.model.*;
 
 import java.io.*;
@@ -38,7 +39,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private String toString(Task task) {
-        if (task instanceof Subtask) {
+        if (task.getType() == TaskType.SUBTASK) {
             Subtask subtask = (Subtask) task;
             return String.format("%d,%s,%s,%s,%s,%d",
                     subtask.getId(),
@@ -47,7 +48,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                     subtask.getStatus(),
                     subtask.getDescription(),
                     subtask.getEpicId());
-        } else if (task instanceof Epic) {
+        } else if (task.getType() == TaskType.EPIC) {
             Epic epic = (Epic) task;
             return String.format("%d,%s,%s,%s,%s",
                     epic.getId(),
@@ -74,12 +75,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String description = docket[4];
         int epicId = docket.length > 5 ? Integer.parseInt(docket[5]) : 0;
         Task task;
-        if (type.equals(TaskType.TASK)) {
-            task = new Task(id, name, status, description);
+        if (type.equals(TaskType.SUBTASK)) {
+            task = new Subtask(id, name, status, description, epicId);
         } else if (type.equals(TaskType.EPIC)) {
             task = new Epic(id, name, status, description);
         } else {
-            task = new Subtask(id, name, status, description, epicId);
+            task = new Task(id, name, status, description);
         }
         return task;
     }
@@ -90,18 +91,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             List<String> lines = Files.readAllLines(file.toPath());
             for (String line : lines.subList(1, lines.size())) {
                 Task task = manager.fromString(line);
-                if (task instanceof Subtask) {
-                    manager.addSubtask((Subtask) task);
-                } else if (task instanceof Epic) {
-                    manager.createEpic((Epic) task);
+                if (task.getType() == TaskType.SUBTASK) {
+                    manager.addTask(task);
+                } else if (task.getType() == TaskType.EPIC) {
+                    manager.addTask(task);
                 } else {
-                    manager.createTask(task);
+                    manager.addTask(task);
                 }
             }
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при загрузке данных из файла!", e);
         }
         return manager;
+    }
+
+    @Override
+    protected void addTask(Task task) {
+        super.addTask(task);
     }
 
     @Override
@@ -119,8 +125,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int addSubtask(Subtask subtask) {
-        super.addSubtask(subtask);
+    public int createSubtask(Subtask subtask) {
+        super.createSubtask(subtask);
         save();
         return subtask.getId();
     }
