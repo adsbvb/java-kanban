@@ -1,6 +1,5 @@
 package tracker.controllers;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +32,7 @@ class InMemoryTaskManagerTest {
         idEpic = taskManager.createEpic(testEpic);
 
         testSubtask = new Subtask(3, "SubtaskName", Status.NEW, "SubtaskDescription", idEpic);
-        idSubtask = taskManager.addSubtask(testSubtask);
+        idSubtask = taskManager.createSubtask(testSubtask);
     }
 
     @Test
