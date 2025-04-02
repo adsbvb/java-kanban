@@ -1,24 +1,43 @@
+import tracker.controllers.FileBackedTaskManager;
 import tracker.controllers.Managers;
 import tracker.controllers.TaskManager;
-import tracker.model.Task;
-import tracker.model.Epic;
-import tracker.model.Subtask;
-import tracker.model.Status;
+import tracker.model.*;
+
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
 
-        TaskManager taskManager = Managers.getDefault();
+        File file = null;
+        try {
+            file = File.createTempFile("save_", ".csv");
+        } catch (IOException e) {
+            System.out.println(e);
+        }
 
-        int task1 = taskManager.createTask(new Task("Покупка.", "Купить продукты.", Status.NEW));
-        int task2 = taskManager.createTask(new Task("Уборка.", "Протереть пыль.", Status.NEW));
+        TaskManager taskManager = Managers.getDefault(file);
 
-        int epic1 = taskManager.createEpic(new Epic("Путевка.", "Выбрать маршрут.", Status.NEW));
-        int subtask1_1 = taskManager.addSubtask(new Subtask("Билеты.", "Купить.", Status.NEW, 3));
-        int subtask1_2 = taskManager.addSubtask(new Subtask("Личные вещи.", "Собрать чемодан.", Status.NEW, 3));
+        int task1 = taskManager.createTask(new Task("Покупка.", Status.NEW, "Купить продукты."));
+        int task2 = taskManager.createTask(new Task("Уборка.", Status.NEW, "Протереть пыль."));
 
-        int epic2 = taskManager.createEpic(new Epic("Изучить новую специальность.", "Освоить язык программирования Java.", Status.NEW));
-        int subtask2_1 = taskManager.addSubtask(new Subtask("Учеба.", "Пройти курс на Яндекс-Практикум.", Status.NEW, 6));
+        int epic1 = taskManager.createEpic(new Epic("Путевка.", Status.NEW, "Выбрать маршрут."));
+        int subtask11 = taskManager.createSubtask(new Subtask("Билеты.", Status.NEW, "Купить.", 3));
+        int subtask12 = taskManager.createSubtask(new Subtask("Личные вещи.", Status.NEW, "Собрать чемодан.", 3));
 
+        int epic2 = taskManager.createEpic(new Epic("Изучить новую специальность.", Status.NEW, "Освоить язык программирования Java."));
+        int subtask21 = taskManager.createSubtask(new Subtask("Учеба.", Status.NEW, "Пройти курс на Яндекс-Практикум.", 6));
+
+        System.out.println(taskManager.getTasks());
+        System.out.println(taskManager.getEpics());
+        System.out.println(taskManager.getSubtasks());
+        System.out.println("================");
+
+        taskManager.deleteTasks();
+
+        TaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
+        System.out.println(fileBackedTaskManager.getTasks());
+        System.out.println(fileBackedTaskManager.getEpics());
+        System.out.println(fileBackedTaskManager.getSubtasks());
     }
 }

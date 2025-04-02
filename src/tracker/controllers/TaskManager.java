@@ -12,7 +12,7 @@ public interface TaskManager {
 
     int createEpic(Epic epic);
 
-    int addSubtask(Subtask subtask);
+    int createSubtask(Subtask subtask);
 
     ArrayList<Task> getTasks();
 
@@ -20,9 +20,9 @@ public interface TaskManager {
 
     ArrayList<Subtask> getSubtasks();
 
-    void deleteTask();
+    void deleteTasks();
 
-    void deleteEpic();
+    void deleteEpics();
 
     void deleteSubtasks();
 
