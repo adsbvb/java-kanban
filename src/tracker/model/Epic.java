@@ -23,10 +23,6 @@ public class Epic extends Task {
         super(id, name, description, status, startTime, duration);
     }
 
-    public Epic(int id, String name, String description, Status status) {
-        super(id, name, description, status);
-    }
-
     public ArrayList<Subtask> getSubtasks() {
         return subtasks;
     }
