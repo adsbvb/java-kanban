@@ -6,6 +6,7 @@ import tracker.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskManager {
     int createTask(Task task);
@@ -26,11 +27,11 @@ public interface TaskManager {
 
     void deleteSubtasks();
 
-    Task getTask(int id);
+    Optional<Task> getTask(int id);
 
-    Epic getEpic(int id);
+    Optional<Epic> getEpic(int id);
 
-    Subtask getSubtask(int id);
+    Optional<Subtask> getSubtask(int id);
 
     void updateTask(int id, Task task);
 
@@ -38,18 +39,19 @@ public interface TaskManager {
 
     void updateSubtask(int id, Subtask subtask);
 
-    void deleteTaskById(int id);
+    void removeTaskById(int id);
 
-    void deleteEpicById(int id);
+    void removeEpicById(int id);
 
-    void deleteSubtaskById(int id);
+    void removeSubtaskById(int id);
 
     ArrayList<Subtask> getSubtasksListOfEpic(int id);
 
-    void updateEpicStatus(int id);
+    void updateEpicStatus(Epic epic);
 
     List<Task> getHistory();
 
-    void remove(int id);
+    void removeFromHistoryList(int id);
 
+    ArrayList<Task> getPrioritizedTasks();
 }
