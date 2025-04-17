@@ -110,6 +110,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void deleteEpics() {
         removeAllTasksFromHistory(epics);
         removeAllTasksFromHistory(subtasks);
+        getSubtasks().forEach(prioritizedTasks::remove);
         epics.clear();
         subtasks.clear();
     }
@@ -140,11 +141,13 @@ public class InMemoryTaskManager implements TaskManager {
         if (!epics.containsKey(id)) {
             throw new IllegalArgumentException("Эпик с заданным ID " + id + " не найден!");
         }
-        for (Subtask subtask : epics.get(id).getSubtasks()) {
-            removeFromHistoryList(subtask.getId());
-            subtasks.remove(subtask.getId());
-        }
-        historyManager.remove(id);
+        epics.get(id).getSubtasks().stream()
+                .forEach(subtask -> {
+                    removeFromHistoryList(subtask.getId());
+                    prioritizedTasks.remove(subtask);
+                    subtasks.remove(subtask.getId());
+                });
+        removeFromHistoryList(id);
         epics.remove(id);
     }
 
