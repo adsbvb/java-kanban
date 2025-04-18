@@ -1,19 +1,40 @@
 package tracker.model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
 
     private final int epicId;
 
-    public Subtask(int id, String name, Status status, String description, int epicId) {
-        super(id, name, status, description);
+    public Subtask(int id, String name, String description, Status status, int epicId) {
+        super(id, name,description, status);
         this.epicId = epicId;
     }
 
-    public Subtask(String name, Status status, String description, int epicId) {
-        super(name, status, description);
+    public Subtask(int id, String name, String description, Status status, LocalDateTime startTime, Duration duration, int epicId) {
+        super(id, name, description, status, startTime, duration);
         this.epicId = epicId;
+    }
+
+    public Subtask(String name, String description, int year, int month, int day, int hour, int minutes, long duration, int epicId) {
+        super(name, description, year, month, day, hour, minutes, duration);
+        this.epicId = epicId;
+    }
+
+    public Subtask(int id, Subtask subtask) {
+        super(id, subtask);
+        this.epicId = subtask.getEpicId();
+    }
+
+    public Subtask(String name, String description, int epicId) {
+        super(name, description);
+        this.epicId = epicId;
+    }
+
+    public int getEpicId() {
+        return epicId;
     }
 
     @Override
@@ -24,16 +45,14 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         return "Subtask{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", id=" + id +
-                ", status=" + status +
-                ", epicId=" + epicId +
+                ", status='" + status + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", duration='" + duration + '\'' +
+                ", epicId='" + epicId + '\'' +
                 '}';
-    }
-
-    public int getEpicId() {
-        return epicId;
     }
 
     @Override
