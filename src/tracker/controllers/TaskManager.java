@@ -33,11 +33,11 @@ public interface TaskManager {
 
     Optional<Subtask> getSubtask(int id);
 
-    void updateTask(int id, Task task);
+    void updateTask(Task task);
 
-    void updateEpic(int id, Epic epic);
+    void updateEpic(Epic epic);
 
-    void updateSubtask(int id, Subtask subtask);
+    void updateSubtask(Subtask subtask);
 
     void removeTaskById(int id);
 
@@ -54,4 +54,6 @@ public interface TaskManager {
     void removeFromHistoryList(int id);
 
     ArrayList<Task> getPrioritizedTasks();
+
+    boolean taskOverlapsInTime(Task task);
 }

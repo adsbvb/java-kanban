@@ -4,6 +4,9 @@ import org.junit.jupiter.api.*;
 import tracker.model.Status;
 import tracker.model.Task;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryHistoryManagerTest {
@@ -17,8 +20,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testAddToHistory() {
-        Task task1 = new Task(1, "name1" , "description1", Status.NEW);
-        Task task2 = new Task(2, "name2" , "description2", Status.NEW);
+        Task task1 = new Task(1, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
+        Task task2 = new Task(2, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
         history.add(task1);
         history.add(task2);
         assertEquals(task1, history.getHistory().getFirst(), "Задача №1 не была записана в историю задач!");
@@ -27,7 +30,7 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void checkReentryTaskInHistory() {
-        Task task = new Task("Name", "Description");
+        Task task = new Task(1, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
         history.add(task);
         history.add(task);
         assertEquals(1, history.getHistory().size(), "Задача была записана дважды в историю задач!");
@@ -40,8 +43,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testRemoveFromHistoryStart() {
-        Task task1 = new Task(1, "Name", "Description", Status.NEW);
-        Task task2 = new Task(2, "Name", "Description", Status.NEW);
+        Task task1 = new Task(1, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
+        Task task2 = new Task(2, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
         history.add(task1);
         history.add(task2);
         history.remove(task1.getId());
@@ -50,9 +53,9 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testRemoveFromHistoryMiddle() {
-        Task task1 = new Task(1, "Name", "Description", Status.NEW);
-        Task task2 = new Task(2, "Name", "Description", Status.NEW);
-        Task task3 = new Task(3, "Name", "Description", Status.NEW);
+        Task task1 = new Task(1, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
+        Task task2 = new Task(2, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
+        Task task3 = new Task(3, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
         history.add(task1);
         history.add(task2);
         history.add(task3);
@@ -62,8 +65,8 @@ class InMemoryHistoryManagerTest {
 
     @Test
     void testRemoveFromHistoryEnd() {
-        Task task1 = new Task(1, "Name", "Description", Status.NEW);
-        Task task2 = new Task(2, "Name", "Description", Status.NEW);
+        Task task1 = new Task(1, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
+        Task task2 = new Task(2, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
         history.add(task1);
         history.add(task2);
         history.remove(task2.getId());
