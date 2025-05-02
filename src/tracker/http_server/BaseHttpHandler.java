@@ -29,7 +29,8 @@ public class BaseHttpHandler {
         h.sendResponseHeaders(404, -1);
     }
 
-    protected void sendHasInteractions(HttpExchange h, String text) throws IOException {
+    protected void sendHasInteractions(HttpExchange h) throws IOException {
+        String text = "Созданная задача пересекается с существующей задачей!";
         byte[] resp = text.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(406, text.length());
