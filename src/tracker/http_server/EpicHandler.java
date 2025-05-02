@@ -34,7 +34,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                     handleDeleteEpics(exchange);
                     break;
                 default:
-                    sendNotFound(exchange);
+                    sendText(exchange, "Метод не предусмотрен.", 405);
                     break;
             }
         } catch (Exception e) {
@@ -69,7 +69,7 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
             String body = new String(bodyInputStream.readAllBytes(), StandardCharsets.UTF_8);
             Epic epic = gson.fromJson(body, Epic.class);
             if (epic == null) {
-                sendHasInteractions(exchange, "Некорректные данные задачи.");
+                sendText(exchange, "Некорректные данные задачи.", 400);
                 return;
             }
             if (taskManager.getEpic(epic.getId()).isPresent()) {
@@ -80,7 +80,8 @@ public class EpicHandler extends BaseHttpHandler implements HttpHandler {
                 sendText(exchange, "Эпик добавлен.", 200);
             }
         } catch (Exception e) {
-            sendHasInteractions(exchange, "Ошибка при обработке задачи: " + e.getMessage());
+            e.printStackTrace();
+            sendText(exchange, "Ошибка при обработке задачи: " + e.getMessage(), 400);
         }
     }
 

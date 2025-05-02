@@ -34,7 +34,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                     handleDeleteTasks(exchange);
                     break;
                 default:
-                    sendNotFound(exchange);
+                    sendText(exchange, "Метод не предусмотрен.", 405);
                     break;
             }
         } catch (Exception e) {
@@ -69,11 +69,11 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             String body = new String(bodyInputStream.readAllBytes(), StandardCharsets.UTF_8);
             Task task = gson.fromJson(body, Task.class);
             if (task == null) {
-                sendHasInteractions(exchange, "Некорректные данные задачи.");
+                sendText(exchange, "Некорректные данные задачи.", 400);
                 return;
             }
             if (taskManager.taskOverlapsInTime(task)) {
-                sendHasInteractions(exchange, "Созданная задача пересекается с существующей задачей!");
+                sendHasInteractions(exchange);
                 return;
             }
             if (taskManager.getTask(task.getId()).isPresent()) {
@@ -85,7 +85,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            sendHasInteractions(exchange, "Ошибка при обработке задачи: " + e.getMessage());
+            sendText(exchange, "Ошибка при обработке задачи: " + e.getMessage(), 400);
         }
     }
 

@@ -23,7 +23,7 @@ public class PrioritizedHandler extends BaseHttpHandler implements HttpHandler {
                 handleGetPrioritized(exchange);
                 break;
             default:
-                sendNotFound(exchange);
+                sendText(exchange, "Метод не предусмотрен.", 405);
                 break;
         }
     }
