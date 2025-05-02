@@ -74,8 +74,8 @@ public class Epic extends Task {
                     .map(Subtask::getDuration)
                     .reduce(Duration.ZERO, Duration::plus);
         } else {
-            this.startTime = LocalDateTime.MIN;
-            this.endTime = LocalDateTime.MAX;
+            this.startTime = null; // LocalDateTime.MIN;
+            this.endTime = null; // LocalDateTime.MAX;
             this.duration = Duration.ZERO;
         }
     }
