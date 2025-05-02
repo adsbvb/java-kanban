@@ -13,16 +13,6 @@ public class Task {
     protected LocalDateTime startTime;
     protected Duration duration;
 
-    public Task(int id, String name, String description, Status status,
-                int year, int month, int day, int hour, int minutes, long duration) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.status = status;
-        this.startTime = LocalDateTime.of(year, month, day, hour, minutes);
-        this.duration = Duration.ofMinutes(duration);
-    }
-
     public Task(int id, String name, String description, Status status, LocalDateTime startTime, Duration duration) {
         this.id = id;
         this.name = name;
@@ -30,25 +20,6 @@ public class Task {
         this.status = status;
         this.startTime = startTime;
         this.duration = duration;
-    }
-
-    public Task(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
-    public Task(int id, String name, String description, Status status) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.status = status;
-    }
-
-    public Task(String name, String description, int year, int month, int day, int hour, int minutes, long duration) {
-        this.name = name;
-        this.description = description;
-        this.startTime = LocalDateTime.of(year, month, day, hour, minutes);
-        this.duration = Duration.ofMinutes(duration);
     }
 
     public Task(int id, Task task) {

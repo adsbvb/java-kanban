@@ -2,10 +2,13 @@ package tracker.controllers;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import tracker.model.Status;
 import tracker.model.Task;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,8 +43,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
 
     @Test
     void testSaveAndLoadMultipleTasks() {
-        Task task1 = new Task( "name1", "description1");
-        Task task2 = new Task("name2","description2");
+        Task task1 = new Task( 1, "Name", "Description", Status.NEW, LocalDateTime.now(), Duration.ofMinutes(5));
+        Task task2 = new Task(2, "Name", "Description", Status.NEW, LocalDateTime.now().plusMinutes(5), Duration.ofMinutes(5));
         int idTask1 = taskManager.createTask(task1);
         int idTask2 = taskManager.createTask(task2);
 

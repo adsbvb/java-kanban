@@ -30,7 +30,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         if (taskOverlapsInTime(task)) {
-            throw new IllegalArgumentException("Созданная задача \'" + task.getName() + "\' пересекается с существущей задачей!");
+            throw new IllegalArgumentException("Созданная задача \'" + task.getName() + "\' пересекается с существующей задачей!");
         }
         int id = generateId();
         Task newTask = new Task(id, task);
@@ -67,19 +67,20 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateTask(int id, Task task) {
-        if (!tasks.containsKey(id)) {
-            throw new IllegalArgumentException("Задача с заданным ID " + id + " не найдена!");
+    public void updateTask(Task task) {
+        int idTask = task.getId();
+        if (!tasks.containsKey(idTask)) {
+            throw new IllegalArgumentException("Задача с заданным ID " + idTask + " не найдена!");
         }
         if (taskOverlapsInTime(task)) {
             throw new IllegalArgumentException("Обновленная задача \'" + task.getName() + "\' пересекается с существущей задачей!");
         }
-        Task newTask = new Task(id, task);
+        Task newTask = new Task(idTask, task);
         prioritizedTasks.remove(task);
         if (newTask.getStartTime() != null) {
             prioritizedTasks.add(newTask);
         }
-        tasks.put(id, newTask);
+        tasks.put(idTask, newTask);
     }
 
     @Override
@@ -96,7 +97,6 @@ public class InMemoryTaskManager implements TaskManager {
     public int createEpic(Epic epic) {
         int id = generateId();
         Epic newEpic = new Epic(id, epic);
-        updateEpicStartTime(newEpic);
         epics.put(id, newEpic);
         return id;
     }
@@ -126,14 +126,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateEpic(int id, Epic epic) {
-        if (!epics.containsKey(id)) {
-            throw new IllegalArgumentException("Эпик с заданным ID " + id + " не найден!");
+    public void updateEpic(Epic epic) {
+        int idEpic = epic.getId();
+        if (!epics.containsKey(idEpic)) {
+            throw new IllegalArgumentException("Эпик с заданным ID " + idEpic + " не найден!");
         }
-        Epic newEpic = new Epic(id, epic);
-        newEpic.addSubtasks(epics.get(id).getSubtasks());
-        epics.put(id, newEpic);
-        updateEpicStatus(epic);
+        Epic newEpic = new Epic(idEpic, epic);
+        newEpic.addSubtasks(epics.get(idEpic).getSubtasks());
+        epics.put(idEpic, newEpic);
     }
 
     @Override
@@ -212,16 +212,17 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void updateSubtask(int id, Subtask subtask) {
-        if (!subtasks.containsKey(id)) {
-            throw new IllegalArgumentException("Позадача с заданным ID " + id + " не найдена!");
+    public void updateSubtask(Subtask subtask) {
+        int idSubtask = subtask.getId();
+        if (!subtasks.containsKey(idSubtask)) {
+            throw new IllegalArgumentException("Позадача с заданным ID " + idSubtask + " не найдена!");
         }
         if (taskOverlapsInTime(subtask)) {
             throw new IllegalArgumentException("Обновленная подзадача \'" + subtask.getName() + "\' пересекается с существущей задачей!");
         }
         Epic epic = epics.get(subtask.getEpicId());
-        Subtask newSubtask = new Subtask(id, subtask);
-        epic.getSubtasks().remove(subtasks.get(id));
+        Subtask newSubtask = new Subtask(idSubtask, subtask);
+        epic.getSubtasks().remove(subtasks.get(idSubtask));
         epic.getSubtasks().add(newSubtask);
         updateEpicStatus(epic);
         updateEpicStartTime(epic);
@@ -229,7 +230,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (newSubtask.getStartTime() != null) {
             prioritizedTasks.add(newSubtask);
         }
-        subtasks.put(id, newSubtask);
+        subtasks.put(idSubtask, newSubtask);
     }
 
     @Override
@@ -286,7 +287,8 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setStartTime();
     }
 
-    private Boolean taskOverlapsInTime(Task task) {
+    @Override
+    public boolean taskOverlapsInTime(Task task) {
         if (task.getStartTime() == null) {
             return false;
         }

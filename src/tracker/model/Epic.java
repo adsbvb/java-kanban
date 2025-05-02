@@ -11,16 +11,16 @@ public class Epic extends Task {
     private ArrayList<Subtask> subtasks = new ArrayList<>();
     private LocalDateTime endTime;
 
-    public Epic(String name, String description) {
-        super(name, description);
-    }
-
     public Epic(int id, Epic epic) {
         super(id, epic);
+        updateStatus();
+        setStartTime();
     }
 
     public Epic(int id, String name, String description, Status status, LocalDateTime startTime, Duration duration) {
         super(id, name, description, status, startTime, duration);
+        updateStatus();
+        setStartTime();
     }
 
     public ArrayList<Subtask> getSubtasks() {
@@ -74,8 +74,9 @@ public class Epic extends Task {
                     .map(Subtask::getDuration)
                     .reduce(Duration.ZERO, Duration::plus);
         } else {
-            this.startTime = null;
-            this.endTime = null;
+            this.startTime = LocalDateTime.MIN;
+            this.endTime = LocalDateTime.MAX;
+            this.duration = Duration.ZERO;
         }
     }
 
