@@ -11,8 +11,8 @@ class ManagersTest {
 
     @Test
     void testGetDefaultManager() throws IOException {
-        File file = File.createTempFile("test_", ".csv");
-        assertNotNull(Managers.getDefault(file));
+        //File file = File.createTempFile("test_", ".csv");
+        assertNotNull(Managers.getDefault());
     }
 
     @Test
